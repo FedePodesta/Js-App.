@@ -1,0 +1,96 @@
+
+.negrita {
+    font-weight: bold;
+}
+
+.usuario {
+    border: 1px solid black;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 8px;;
+}
+
+.btn {
+    height: 40px;
+    width: 120px;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.btn-ok {
+    background-color: rgb(3, 197, 3);
+}
+
+.btn-ok:hover {
+    background-color: rgb(2, 120, 2);
+}
+
+.btn-cancel {
+    background-color: rgb(244, 153, 153);
+}
+
+.btn-cancel:hover {
+    background-color: rgb(248, 61, 61);
+}
+
+#modal {
+    display: none;
+    position: fixed;
+    top: 200px;
+    left: calc(50% - 200px);
+    width: 400px;
+}
+
+#modal #close {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    cursor: pointer;
+    line-height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: black;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    z-index: 1;
+}
+
+#modal #close:hover {
+    background-color: orange;
+}
+
+#modal #background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+#modal #modal-contenido {
+    position: relative;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 20px;
+}
+
+.show {
+    display: block !important;
+}
+
+input {
+    display: block;
+    height: 30px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 15px;
+    padding: 8px;
+    margin-bottom: 10px;
+}
