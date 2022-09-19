@@ -75,7 +75,27 @@ function mostrarUsuario(usuario) {
         btnGuardar.textContent = 'Guardar';
 
         btnGuardar.addEventListener('click', e => {
-            // Hacer la modificacion
+            const x = new XMLHttpRequest();
+
+            x.open('put', `https://jsonplaceholder.typicode.com/users/${usuario.id}`);
+
+            x.addEventListener('load', e => {
+                if (x.status >= 200 && x.status <= 299) {
+                    alert('Modificado!')
+                } else {
+                    alert('Error');
+                }
+            });
+
+            const data = JSON.stringify({
+                name: nombre.value,
+                email: email.value,
+                phone: telefono.value,
+                website: web.value
+            });
+
+            x.send(data);
+
             modal.classList.remove('show');
         });
 
@@ -106,7 +126,20 @@ function mostrarUsuario(usuario) {
         btnOk.textContent = 'OK';
 
         btnOk.addEventListener('click', e => {
-            // Hacer el Delete
+            const x = new XMLHttpRequest();
+
+            x.open('delete', `https://jsonplaceholder.typicode.com/users/${usuario.id}`);
+
+            x.addEventListener('load', e => {
+                if (x.status >= 200 && x.status <= 299) {
+                    article.remove();
+                } else {
+                    alert('Error');
+                }
+            });
+
+            x.send();
+
             modal.classList.remove('show');
         });
 
