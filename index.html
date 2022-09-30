@@ -9,19 +9,39 @@
     
 </head>
 <body>
-    <div id="listado-usuarios"></div>
+    <div id="home">
+        <button class="btn btn-ok" id="btn-crear">Crear Usuario</button>
+
+        <div id="listado-usuarios"></div>
+    </div>
 
     <div id="modal">
         <span id="close">X</span>
         <div id="background"></div>
         <div id="modal-contenido"></div>
     </div>
+
+    <div id="form">
+        <div>
+            <label for="nombre">Nombre</label>
+            <input type="text" name="nombre" id="nombre">
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email">
+        </div>
+        <div>
+            <label for="telefono">Telefono</label>
+            <input type="tel" name="telefono" id="telefono">
+        </div>
+        <div>
+            <label for="web">Web</label>
+            <input type="url" name="web" id="web">
+        </div>
+        <button class="btn btn-ok" id="btn-guardar">Guardar</button>
+        <button class="btn btn-cancel" id="btn-cancelar">Cancelar</button>
+    </div>
     
     <div id="loader">
         <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
     </div>
-    
-    
-<script src="script.js"></script>
-</body>
-</html>

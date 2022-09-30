@@ -150,3 +150,19 @@ input {
 .show {
     display: block !important;
 }
+
+.hide {
+    display: none !important;
+}
+
+#form {
+    display: none;
+    border: 1px solid black;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#home {
+    display: none;
+}

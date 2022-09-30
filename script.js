@@ -1,9 +1,18 @@
-
 const modal = document.getElementById('modal');
 const close = document.getElementById('close');
 const background = document.getElementById('background');
 const modalContenido = document.getElementById('modal-contenido');
 const loader = document.getElementById('loader');
+const home = document.getElementById('home');
+const form = document.getElementById('form');
+const btnGuardar = document.getElementById('btn-guardar');
+const btnCancelar = document.getElementById('btn-cancelar');
+const btnCrear = document.getElementById('btn-crear');
+
+const nombre = document.getElementById('nombre');
+const email = document.getElementById('email');
+const telefono = document.getElementById('telefono');
+const web = document.getElementById('web');
 
 const listadoUsuarios = document.getElementById('listado-usuarios');
 
@@ -11,11 +20,66 @@ const estado = {
     usuarios: null
 };
 
+function cargarFormulario(id) {
+    nombre.value = '';
+    email.value = '';
+    telefono.value = '';
+    web.value = '';
+
+    if (id) {
+        realizarPeticion(
+            'get',
+            `https://jsonplaceholder.typicode.com/users/${id}`,
+            usuario => {
+                nombre.value = usuario.name;
+                email.value = usuario.email;
+                telefono.value = usuario.phone;
+                web.value = usuario.website;
+            }
+            , handleError
+        );
+    }
+}
+
+function mostrarOcultar() {
+    const hash = location.hash.split('/');
+
+    home.classList.remove('show');
+    form.classList.remove('show');
+
+    switch(hash[0]) {
+        case '#home':
+            realizarPeticion('get', 'https://jsonplaceholder.typicode.com/users', mostrarUsuarios, handleError);
+            home.classList.add('show');
+            break;
+        case '#crear':
+            cargarFormulario();
+            form.classList.add('show');
+            break;
+        case '#modificar':
+            cargarFormulario(hash[1]);
+            form.classList.add('show');
+            break;
+    }
+}
+
 function showLoader(show) {
     if (show) {
         loader.classList.add('show');
     } else {
         loader.classList.remove('show');
+    }
+}
+
+function showForm(show) {
+    if (show) {
+        form.classList.add('show');
+        listadoUsuarios.classList.add('hide');
+        btnCrear.classList.add('hide');
+    } else {
+        form.classList.remove('show');
+        listadoUsuarios.classList.remove('hide');
+        btnCrear.classList.remove('hide');
     }
 }
 
@@ -95,7 +159,8 @@ function handleEliminar(event) {
             `https://jsonplaceholder.typicode.com/users/${usuario.id}`,
             eliminarUsuario,
             handleError
-        )
+        );
+
         modal.classList.remove('show');
     });
 
@@ -130,62 +195,7 @@ function mostrarUsuario(usuario) {
     btnModificar.textContent = 'Modificar';
 
     btnModificar.addEventListener('click', e => {
-        modalContenido.innerHTML = `
-            <h3>Modificacion</h3>
-        `;
-
-        const nombre = document.createElement('input');
-        nombre.placeholder = 'Ingrese el nombre';
-        nombre.type = 'text';
-        nombre.value = usuario.name;
-
-        const email = document.createElement('input');
-        email.placeholder = 'Ingrese el email';
-        email.type = 'email';
-        email.value = usuario.email;
-
-        const telefono = document.createElement('input');
-        telefono.placeholder = 'Ingrese el telefono';
-        telefono.type = 'tel';
-        telefono.value = usuario.phone;
-
-        const web = document.createElement('input');
-        web.placeholder = 'Ingrese el website';
-        web.type = 'url';
-        web.value = usuario.website;
-
-        const btnCancelar = document.createElement('button');
-        btnCancelar.className = 'btn btn-cancel';
-        btnCancelar.textContent = 'Cancelar';
-
-        btnCancelar.addEventListener('click', e => {
-            modal.classList.remove('show');
-        });
-
-        const btnGuardar = document.createElement('button');
-        btnGuardar.className = 'btn btn-ok';
-        btnGuardar.textContent = 'Guardar';
-
-        btnGuardar.addEventListener('click', e => {
-            realizarPeticion(
-                'put',
-                `https://jsonplaceholder.typicode.com/users/${usuario.id}`,
-                () => {},
-                handleError,
-                {
-                    name: nombre.value,
-                    email: email.value,
-                    phone: telefono.value,
-                    website: web.value
-                }
-            )
-
-            modal.classList.remove('show');
-        });
-
-        modalContenido.append(nombre, email, telefono, web, btnCancelar, btnGuardar);
-
-        modal.classList.add('show');
+        location.hash = `modificar/${usuario.id}`;
     });
 
     const btnEliminar = document.createElement('button');
@@ -201,5 +211,43 @@ function mostrarUsuario(usuario) {
 
 close.addEventListener('click', ocultarModal);
 background.addEventListener('click', ocultarModal);
+btnCrear.addEventListener('click', e => {
+    location.hash = 'crear';
+});
 
-realizarPeticion('get', 'https://jsonplaceholder.typicode.com/users', mostrarUsuarios,handleError);
+btnCancelar.addEventListener('click', () => {
+    location.hash = 'home';
+});
+
+btnGuardar.addEventListener('click', e => {
+    const hash = location.hash.split('/');
+    const metodo = hash[0] === '#crear' ? 'post' : 'put';
+    let url = 'https://jsonplaceholder.typicode.com/users'
+
+    if (hash[0] === '#modificar') {
+        url += `/${hash[1]}`;
+    }
+
+    realizarPeticion(
+        metodo,
+        url,
+        () => {
+            location.hash = 'home';
+        },
+        handleError,
+        {
+            name: nombre.value,
+            email: email.value,
+            phone: telefono.value,
+            website: web.value
+        }
+    );
+});
+
+window.addEventListener('hashchange', mostrarOcultar);
+
+if (location.hash === '') {
+    location.hash = 'home';
+} else {
+    mostrarOcultar();
+}
